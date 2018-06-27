@@ -1,0 +1,4 @@
+
+.. automodule:: drytools.composition
+  :members:
+

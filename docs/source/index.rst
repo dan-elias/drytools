@@ -11,6 +11,8 @@ Contents
    installation
    contributing
    example
+   composition
+   decorator
 
 .. Insert module references above here
 
@@ -20,3 +22,7 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+
+
