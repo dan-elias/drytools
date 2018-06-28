@@ -15,7 +15,7 @@ version number: 0.0.1
 author: Dan Elias
 
 This library provides tools to make Python code shorter, less repetitive and
-more readable:
+more readable.
 
 Features
 --------
