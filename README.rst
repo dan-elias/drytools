@@ -43,7 +43,6 @@ Without drytools
 ^^^^^^^^^^^^^^^^
 
 .. code:: python
-   :linenos:
 
     from functools import total_ordering
 
@@ -68,7 +67,6 @@ With drytools
 ^^^^^^^^^^^^^
 
 .. code:: python
-   :linenos:
 
     from operator import ge, le
     from drytools import args2attrs, check, compose_annotations, ordered_by
