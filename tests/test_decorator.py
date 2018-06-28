@@ -8,11 +8,13 @@ Unit tests for decorator
 '''
 from functools import wraps
 import unittest
-from drytools import decorator
+from drytools.decorator import decorator_factory, args2attrs
+from drytools.annotation.composition import compose_annotations
+from drytools.annotation.functions import iterify
 
 class Test_decorator_factory(unittest.TestCase):
     def setUp(self):
-        @decorator.decorator_factory
+        @decorator_factory
         def decorator_and_func_args(da='a', db='b'):
             decorator_kwarg_items = sorted(locals().items())
             def decorator(fun):
@@ -52,7 +54,59 @@ class Test_decorator_factory(unittest.TestCase):
             with self.assertRaises(TypeError):
                 test_func(*args, **kwargs)
 
+
+class Test_args2attrs(unittest.TestCase):
+    @compose_annotations
+    def assertOrdinaryAttrs(self, inst, expected_attrs:(iterify, set)):
+        actual_attrs = {a for a in dir(inst) if not a.startswith('_')}
+        self.assertEqual(actual_attrs, expected_attrs)
+    def test_restrict_to_1(self):
+        class has_b:
+            @args2attrs(restrict_to='b')
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(has_b(1, 2, v=3, w=4), 'b')
+    def test_restrict_to_2(self):
+        class has_b_v:
+            @args2attrs(restrict_to=('b', 'v'))
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(has_b_v(5, 6, v=7, w=8), ('b', 'v'))
+    def test_kw_default(self):
+        restrict_to = ('v', 'args')
+        class cls:
+            @args2attrs(restrict_to=restrict_to)
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(cls(9, 10, w=11), restrict_to)
+    def test_exclude(self):
+        exclude = {'v', 'args'}
+        class cls:
+            @args2attrs(exclude=exclude)
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(cls(12, 13, w=14), ['a', 'b', 'u', 'w'])
+    def test_empty_varargs(self):
+        class cls:
+            @args2attrs
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(cls(14, 15, w=16), ['a', 'b', 'args', 'u', 'v', 'w'])
+    def test_empty_varkw(self):
+        class cls:
+            @args2attrs(expand_kw=False)
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(cls(17, 18), ['a', 'b', 'args', 'u', 'v', 'kwargs'])
+    def test_expand_kw(self):
+        exclude = {'v', 'args'}
+        class cls:
+            @args2attrs(exclude=exclude, expand_kw=False)
+            def __init__(self, a, b, *args, u=None, v=1, **kwargs):
+                pass
+        self.assertOrdinaryAttrs(cls(19, 20, w=21), ['a', 'b', 'u', 'kwargs'])
+
+
+
 if __name__ == '__main__':
     unittest.main()
-
-

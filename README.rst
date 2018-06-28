@@ -24,8 +24,7 @@ TBC
 Features
 --------
 
-* decorator for using annotations for function composition (for parameter
-  coercion and validation)
+TBC
 
 Getting started
 ---------------

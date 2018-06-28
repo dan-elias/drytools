@@ -1,2 +1,0 @@
-.. automodule:: drytools.example
-  :members:

@@ -6,15 +6,11 @@ Tools for reducing repetition in Python code
 Contents
 ========
 .. toctree::
+   :glob:
    :maxdepth: 2
 
-   installation
-   contributing
-   example
-   composition
-   decorator
-
-.. Insert module references above here
+   introduction
+   code_pages/*
 
 Indices and tables
 ==================
@@ -22,7 +18,3 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
-
-
-
-
