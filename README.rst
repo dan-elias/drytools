@@ -42,7 +42,7 @@ representing a person's name and age.  The required behaviour is:
 Without drytools
 ^^^^^^^^^^^^^^^^
 
-.. code-block:: python
+.. code:: python
    :linenos:
 
     from functools import total_ordering
@@ -67,7 +67,7 @@ Without drytools
 With drytools
 ^^^^^^^^^^^^^
 
-.. code-block:: python
+.. code:: python
    :linenos:
 
     from operator import ge, le
