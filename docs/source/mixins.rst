@@ -1,4 +1,0 @@
-
-.. automodule:: drytools.mixins
-  :members:
-

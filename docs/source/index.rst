@@ -10,7 +10,6 @@ Contents
    :maxdepth: 2
 
    introduction
-   mixins
    code_pages/*
    contributing
 
