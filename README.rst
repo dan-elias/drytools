@@ -21,7 +21,7 @@ Features
 --------
 
 * function annotations to coerce and/or validate parameters, and
-* decorators and mixins to add groups of special attributes to classes
+* decorators and mixins to add groups of Python standard methods to classes
 
 Example
 -------
@@ -87,12 +87,6 @@ Getting started
 
     $ pip install drytools
 
-Contributing
-------------
-
-* Issue Tracker: https://github.com/dan-elias/drytools/issues
-* Source Code: https://github.com/dan-elias/drytools.git
-
 Documentation
 -------------
 
@@ -101,6 +95,12 @@ Documentation
     :alt: Documentation status unknown
 
 https://drytools.readthedocs.io/en/latest/
+
+Contributing
+------------
+
+* Issue Tracker: https://github.com/dan-elias/drytools/issues
+* Source Code: https://github.com/dan-elias/drytools.git
 
 Continuous integration
 -----------------------

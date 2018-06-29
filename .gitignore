@@ -39,3 +39,6 @@ docs/_build
 
 # Cookiecutter
 output/
+
+# Builds
+dist/
