@@ -10,7 +10,7 @@ Contents
    :maxdepth: 2
 
    introduction
-   ./code_pages/*
+   _modules.*
    contributing
 
 Indices and tables

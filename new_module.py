@@ -82,7 +82,7 @@ def make_new_module(module_name):
     context = {'module_path': checked_module_path(module_name, test=False),
                'test_module_path': checked_module_path(module_name, test=True),
                'module_name': module_name,
-               'doc_stub_path': doc_source_path.joinpath('code_pages/{module_name}.rst'.format(**locals())),
+               'doc_stub_path': doc_source_path.joinpath('_modules.{module_name}.rst'.format(**locals())),
                'module_heading': as_heading(module_name),
                'test_module_heading': as_heading('Unit tests for module {module_name}'.format(**locals())),
                'module_location': '.'.join(module_parts[:-1]),
