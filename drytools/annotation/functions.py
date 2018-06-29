@@ -1,10 +1,12 @@
 
 '''
-====================
-annotation.functions
-====================
+=====================================================
+annotation.functions - Coerce and validate parameters
+=====================================================
 
-Useful functions to use as annotations together with :func:`drytools.annotation.composition.compose_annotations`
+When the :func:`drytools.annotation.composition.compose_annotations` decorator
+is used, these functions can he used as annotations to coerce and/or
+validate parameters.
 
 '''
 from collections.abc import Iterable

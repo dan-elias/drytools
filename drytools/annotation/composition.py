@@ -1,17 +1,16 @@
 
 '''
-======================
-annotation.composition
-======================
+==============================================================================
+annotation.composition - Decorator to use annotations for function composition
+==============================================================================
 
-A decorator for using annotations for function composition
 '''
 from collections import ChainMap
 from collections.abc import Sequence
 from functools import reduce, wraps
 import inspect
 
-from drytools.decorator import decorator_factory
+from drytools.decorator_factory import decorator_factory
 
 @decorator_factory
 def compose_annotations(combine_var_positional=False, combine_var_keyword=False):

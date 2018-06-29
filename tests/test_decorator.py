@@ -6,53 +6,13 @@ Unit tests for module decorator
 
 Unit tests for decorator
 '''
-from functools import wraps
+import random
 import unittest
-from drytools.decorator import decorator_factory, args2attrs
+from drytools.decorator import args2attrs
 from drytools.annotation.composition import compose_annotations
 from drytools.annotation.functions import iterify
+from drytools.decorator import ordered_by
 
-class Test_decorator_factory(unittest.TestCase):
-    def setUp(self):
-        @decorator_factory
-        def decorator_and_func_args(da='a', db='b'):
-            decorator_kwarg_items = sorted(locals().items())
-            def decorator(fun):
-                @wraps(fun)
-                def wrapped(*args, **kwargs):
-                    fun(*args, **kwargs)
-                    return (decorator_kwarg_items, args, sorted(kwargs.items()))
-                return wrapped
-            return decorator
-        @decorator_and_func_args
-        def decorated_with_no_parentheses(p1, p2, k1=1, k2=2):
-            pass
-        @decorator_and_func_args()
-        def decorated_with_empty_parentheses(p1, p2, k1=1, k2=2):
-            pass
-        @decorator_and_func_args(db='bb', da='aa')
-        def decorated_with_args(p1, p2, k1=1, k2=2):
-            pass
-        _locals = locals()
-        self.test_funcs = {k: v for k, v in _locals.items() if k.startswith('decorated_with')}
-    def test_retval_equal(self):
-        for decorated_with, args, kwargs, retval in [
-                ('no_parentheses', (1,2), {}, ([('da', 'a'), ('db', 'b')], (1,2), [])),
-                ('empty_parentheses', (1,2), {}, ([('da', 'a'), ('db', 'b')], (1,2), [])),
-                ('args', (1,2), {}, ([('da', 'aa'), ('db', 'bb')], (1,2), [])),
-                ]:
-            test_func = self.test_funcs['decorated_with_{decorated_with}'.format(**locals())]
-            for v1, v2 in zip(test_func(*args, **kwargs), retval):
-                self.assertEqual(v1, v2)
-    def test_TypeError(self):
-        for decorated_with, args, kwargs in [
-                ('no_parentheses', (1,), {}),
-                ('empty_parentheses', (1,), {}),
-                ('args', (1,), {}),
-                ]:
-            test_func = self.test_funcs['decorated_with_{decorated_with}'.format(**locals())]
-            with self.assertRaises(TypeError):
-                test_func(*args, **kwargs)
 
 
 class Test_args2attrs(unittest.TestCase):
@@ -106,6 +66,35 @@ class Test_args2attrs(unittest.TestCase):
                 pass
         self.assertOrdinaryAttrs(cls(19, 20, w=21), ['a', 'b', 'u', 'kwargs'])
 
+class Test_ordered_by(unittest.TestCase):
+    def setUp(self):
+        random.seed(0)
+    def test_normal(self):
+        @ordered_by('num1', 'num2')
+        class my_cls:
+            def __init__(self, num1, num2):
+                self.num1, self.num2 = num1, num2
+        def shuffled(size=100):
+            return random.choices(list(range(size//2)), k=size)
+        instances = [my_cls(num1, num2) for num1, num2 in zip(shuffled(), shuffled())]
+        sorted_num1 = sorted(x.num1 for x in instances)
+        sorted_num2 = sorted(x.num2 for x in instances)
+        num2_from_sorted_pairs = [n2 for _, n2 in sorted((x.num1, x.num2) for x in instances)]
+        sorted_instances = sorted(instances)
+        sorted_instances_num1 = [x.num1 for x in sorted_instances]
+        sorted_instances_num2 = [x.num2 for x in sorted_instances]
+        self.assertEqual(sorted_num1, sorted_instances_num1)
+        self.assertEqual(num2_from_sorted_pairs, sorted_instances_num2)
+        self.assertNotEqual(sorted_num2, sorted_instances_num2)
+    def test_no_parentheses(self):
+        with self.assertRaises(TypeError):
+            @ordered_by
+            class my_cls:
+                pass
+    def test_raises_TypeError(self):
+        for args in [(1,), ()]:
+            with self.assertRaises(TypeError):
+                ordered_by(*args)
 
 
 if __name__ == '__main__':

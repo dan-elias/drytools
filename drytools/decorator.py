@@ -1,77 +1,24 @@
 
 '''
-=========
-decorator
-=========
-
-Tools for making decorators
+==================================
+decorator - Some useful decorators
+==================================
 
 '''
 from collections import ChainMap
 from functools import wraps
+from operator import eq, ne, gt, lt, ge, le
 import inspect
 
-from drytools.annotation.functions import iterify
-
-def decorator_factory(fun):
-    '''
-    Decorator to make parentheses optional when applying a decorator factory
-    which has optional arguments.
-
-    Args:
-        fun (func): Function that returns a decorator
-
-    Returns:
-        func: Decorator factory which, if it is called with a single callable parameter, returns a wrapped function instead of a decorator
-
-    .. important::
-
-        The factory's signature should:
-
-            * Allow it to be called with no arguments
-            * *Not* allow it to be called with a single
-              positional argument that is callable.
-    Example:
-        >>> from functools import wraps
-        >>> @decorator_factory
-        ... def print_when_called(print_done=False):
-        ...     def decorator(fun):
-        ...         @wraps(fun)
-        ...         def wrapped(*args, **kwargs):
-        ...             print('calling {}'.format(fun.__name__))
-        ...             retval = fun(*args, **kwargs)
-        ...             if print_done:
-        ...                 print('done')
-        ...             return retval
-        ...         return wrapped
-        ...     return decorator
-        >>> @print_when_called(print_done=True)  # decorated with args
-        ... def my_fun_print_done():
-        ...     pass
-        >>> @print_when_called()  # decorated with parentheses, no args
-        ... def my_fun_decorated_empty_parentheses():
-        ...     pass
-        >>> @print_when_called  # decorated without parentheses
-        ... def my_fun_decorated_no_parentheses():
-        ...     pass
-        >>> my_fun_print_done()
-        calling my_fun_print_done
-        done
-        >>> my_fun_decorated_empty_parentheses()
-        calling my_fun_decorated_empty_parentheses
-        >>> my_fun_decorated_no_parentheses()
-        calling my_fun_decorated_no_parentheses
-    '''
-    @wraps(fun)
-    def decorator_or_decorated_function(*args, **kwargs):
-        if (not kwargs) and (len(args) == 1) and callable(args[0]):
-            return fun()(*args, **kwargs) # decorated_function
-        else:
-            return fun(*args, **kwargs) # decorator
-    return decorator_or_decorated_function
+from drytools.annotation.composition import compose_annotations
+from drytools.annotation.functions import check, iterify
+from drytools.decorator_factory import decorator_factory
 
 @decorator_factory
-def args2attrs(restrict_to=(), exclude=(), expand_kw=True):
+@compose_annotations
+def args2attrs(restrict_to:(iterify, set)=(), 
+               exclude:(iterify, set)=(), 
+               expand_kw=True):
     '''
     Decorator to copy method arguments to instance attributes that have the
     same names (eg: in __init__)
@@ -93,8 +40,6 @@ def args2attrs(restrict_to=(), exclude=(), expand_kw=True):
         >>> inst.a, inst.b, inst.total
         (5, 2, 7)
     '''
-    restrict_to = set(iterify(restrict_to))
-    exclude = set(iterify(exclude))
     class to_replace_with_empty_dict:
         pass
     def decorator(fun):
@@ -132,6 +77,41 @@ def args2attrs(restrict_to=(), exclude=(), expand_kw=True):
                         setattr(self, name, value)
             return fun(self, *args, **kwargs)
         return wrapped
+    return decorator
+
+@compose_annotations
+def ordered_by(*attrs: check(isinstance, str, raises=TypeError)):
+    '''
+    Class decorator factory for adding comparison methods based on one or more attributes
+
+    Args:
+        attrs (str): Name(s) of attribute(s) to use for ordering instances
+
+    Returns:
+        func: Function to add comparison methods to the class
+
+    Example:
+        >>> @ordered_by('name')
+        ... class my_cls:
+        ...     def __init__(self, name):
+        ...        self.name = name
+        ...     def __repr__(self):
+        ...         return '{}({})'.format(type(self).__name__, repr(self.name))
+        >>> sorted([my_cls('foo'), my_cls('bar'), my_cls('bax')])
+        [my_cls('bar'), my_cls('bax'), my_cls('foo')]
+    '''
+    if not attrs:
+        raise TypeError('No attrs')
+    def comp_val(instance):
+        return tuple(getattr(instance, attr) for attr in attrs)
+    def decorator(cls):
+        def add_comparison_method(comparison):
+            method_name = '__{comparison.__name__}__'.format(**locals())
+            fun = lambda self, other: comparison(comp_val(self), comp_val(other))
+            setattr(cls, method_name, fun)
+        for comparison in [eq, ne, gt, lt, ge, le]:
+            add_comparison_method(comparison)
+        return cls
     return decorator
 
 

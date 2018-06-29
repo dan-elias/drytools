@@ -1,5 +1,5 @@
 DRYtools documentation
-=====================================
+======================
 
 Tools for reducing repetition in Python code
 
@@ -11,6 +11,7 @@ Contents
 
    introduction
    code_pages/*
+   contributing
 
 Indices and tables
 ==================

@@ -1,53 +1,52 @@
 
 '''
-======
-mixins
-======
-
-Class decorators and mixin classes
-
+====================================
+mixins - add Python standard methods
+====================================
 '''
-from operator import eq, ne, gt, lt, ge, le
+import inspect
 
-from drytools.annotation.composition import compose_annotations
-from drytools.annotation.functions import check
-
-
-@compose_annotations
-def ordered_by(*attrs: check(isinstance, str, raises=TypeError)):
+class repr_from_init:
     '''
-    Class decorator factory for adding comparison methods based on one or more attributes
-
-    Args:
-        attrs (str): Name(s) of attribute(s) to use for ordering
-
-    Returns:
-        func: Function to add comparison methods to the class
-
+    Mixin that implements __repr__ method based in signature of __init__.
+    
     Example:
-        >>> @ordered_by('name')
-        ... class my_cls:
-        ...     def __init__(self, name):
-        ...        self.name = name
-        ...     def __repr__(self):
-        ...         return '{}({})'.format(type(self).__name__, repr(self.name))
-        >>> sorted([my_cls('foo'), my_cls('bar'), my_cls('bax')])
-        [my_cls('bar'), my_cls('bax'), my_cls('foo')]
+        >>> from drytools import args2attrs
+        >>> class my_cls(repr_from_init):
+        ...     @args2attrs
+        ...     def __init__(self, a1, *args, k1=8, k2=8):
+        ...         pass
+        >>> my_cls(1,2,'foo')
+        my_cls(1, 2, 'foo')
+        >>> my_cls(k2=5, a1=1)
+        my_cls(1, k2=5)
+    
+    Requirements:
+        
+        * __init__ must not have any variable keyword arguments
+        * __init__ arguments (including variable positional ones) must all 
+          be saved as instance attribtues with the same names.  An easy 
+          way to do this is to use the :func:`args2attrs` decorator.
     '''
-    if not attrs:
-        raise TypeError('No attrs')
-    def comp_val(instance):
-        return tuple(getattr(instance, attr) for attr in attrs)
-    def decorator(cls):
-        def add_comparison_method(comparison):
-            method_name = '__{comparison.__name__}__'.format(**locals())
-            fun = lambda self, other: comparison(comp_val(self), comp_val(other))
-            setattr(cls, method_name, fun)
-        for comparison in [eq, ne, gt, lt, ge, le]:
-            add_comparison_method(comparison)
-        return cls
-    return decorator
-
+    def __repr__(self):
+        sig = inspect.signature(self.__init__)
+        def _kwarg_repr(name, value):
+            value_repr = repr(value)
+            return '{name}={value_repr}'.format(**locals())
+        arg_reprs = []
+        for param in sig.parameters.values():
+            param_value = getattr(self, param.name)
+            if param.kind is inspect._VAR_POSITIONAL:
+                arg_reprs.extend(map(repr, param_value))
+            elif param.kind is inspect._VAR_KEYWORD:
+                arg_reprs.extend(_kwarg_repr(k, v) for k, v in sorted(param_value.items()))
+            elif param.default is not inspect._empty:
+                if param_value != param.default:
+                    arg_reprs.append(_kwarg_repr(param.name, param_value))
+            else:
+                assert param.kind in (inspect._POSITIONAL_ONLY, inspect._POSITIONAL_OR_KEYWORD)
+                arg_reprs.append(repr(param_value))
+        return '{cls_name}({combined_args_repr})'.format(cls_name=type(self).__name__, combined_args_repr=', '.join(arg_reprs))
 
 if __name__ == '__main__':
     import doctest
