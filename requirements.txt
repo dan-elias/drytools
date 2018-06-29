@@ -1,0 +1,7 @@
+# Project dependencies
+# ====================
+# Packages required by the project
+#
+# Other dependency files:
+#   * requirements_doc.txt:  Requirements for building documentation
+#   * requirements_build.txt: Requirements for building, testing and publishing code

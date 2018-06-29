@@ -1,4 +1,10 @@
 # Documentation dependencies
+# ==========================
+# Packages required to build the project's documentation (used by ReadTheDocs)
+#
+# Other dependency files:
+#   * requirements.txt:  The project's requirements
+#   * requirements_build.txt: Requirements for building, testing and publishing code
 sphinx
 sphinx_rtd_theme
 sphinxcontrib-napoleon
