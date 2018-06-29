@@ -8,8 +8,9 @@ make html
 cd ..
 
 # Prepare requirements.txt for ReadThedocs
-cat requirements_doc.txt > requirements.txt
-cat requirements_package.txt >> requirements.txt
+requirements_rtd=requirements_rtd.txt
+cat requirements_doc.txt > $requirements_rtd
+cat requirements_package.txt >> $requirements_rtd
 
 # Open docs in browser
 ./open_docs.sh
