@@ -48,6 +48,7 @@ class repr_from_init:
                 arg_reprs.append(repr(param_value))
         return '{cls_name}({combined_args_repr})'.format(cls_name=type(self).__name__, combined_args_repr=', '.join(arg_reprs))
 
+
 if __name__ == '__main__':
     import doctest
     doctest.testmod()
