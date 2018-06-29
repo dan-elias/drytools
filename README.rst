@@ -10,7 +10,7 @@
 DRYtools
 ===============================
 
-version number: 0.1.2
+version number: 0.1.3
 
 author: Dan Elias
 
