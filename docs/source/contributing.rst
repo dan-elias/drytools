@@ -10,6 +10,8 @@ To install with editing enabled (ie: for development), use:
     $ git clone https://github.com/dan-elias/drytools.git
     $ cd drytools
     $ pip install -e .
+    $ pip install -r requirements_build.txt
+    $ pip install -r requirements_doc.txt
 
 
 Documentation

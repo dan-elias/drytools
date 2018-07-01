@@ -1,0 +1,12 @@
+# Build dependencies
+# ==================
+# Packages required for building, testing, packaging and publishing the project's code
+#
+# Other dependency files:
+#   * requirements.txt:  The project's requirements
+#   * requirements_doc.txt:  Requirements for building documentation
+nose
+coverage
+pypi-publisher
+bumpversion
+twine

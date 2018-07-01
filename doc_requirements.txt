@@ -1,5 +1,0 @@
-# Documentation dependencies
-sphinx
-sphinx_rtd_theme
-sphinxcontrib-napoleon
-sphinx_rtd_theme
