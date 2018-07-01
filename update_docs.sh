@@ -21,5 +21,4 @@ do
   cat $src_file >> $requirements_rtd
 done
 
-# Open docs in browser
-./open_docs.sh
+echo Docs available at: file://`pwd`/docs/build/html/index.html

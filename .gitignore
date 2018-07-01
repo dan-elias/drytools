@@ -42,3 +42,7 @@ output/
 
 # Builds
 dist/
+
+# Coverage
+.coverage
+htmlcov/
