@@ -9,4 +9,6 @@ nose
 coverage
 pypi-publisher
 bumpversion
+pytest
+pytest-cov
 twine
