@@ -1,8 +1,5 @@
-Contributing
-============
-
 Setup
------
+=====
 To install with editing enabled (ie: for development), use:
 
 .. code-block:: bash
@@ -15,7 +12,7 @@ To install with editing enabled (ie: for development), use:
 
 
 Documentation
--------------
+=============
 This project uses `Sphinx <http://www.sphinx-doc.org/en/master/>`_
 documentation with the `Google docstring style <http://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`_.
 
@@ -35,7 +32,7 @@ Documentation is also hosted online at: `Read the Docs <https://drytools.readthe
 
 
 Tests
------
+=====
 Unit tests should be in the :mod:`unittest` style and placed in the
 ../tests folder (or subfolders corresponding to the package hierarchy).
 Each module should have a corresponding test script named
@@ -54,13 +51,13 @@ To run all unit tests and doc tests, navigate to the project root folder and run
   $ ./run_tests.sh
 
 Continuous integration
------------------------
+======================
 
 Hosted at:  https://travis-ci.org/dan-elias/drytools
 
 
 Adding a module
----------------
+===============
 The easiest way to add a module is to use the "new_module.sh" script.  This:
 
 * Adds template files for:

@@ -1,5 +1,5 @@
-Introduction
-============
+Overview
+========
 
 This library provides tools to make Python code shorter, less repetitive and
 more readable by using:
@@ -8,7 +8,7 @@ more readable by using:
 * decorators and mixins to add groups of Python standard methods to classes
 
 Example
--------
+=======
 
 This example provides implementation with and without drytools for a class
 representing a person's name and age.  The required behaviour is:
@@ -24,7 +24,7 @@ representing a person's name and age.  The required behaviour is:
   by name for people with the same age)
 
 Without drytools
-^^^^^^^^^^^^^^^^
+----------------
 
 .. code-block:: python
    :linenos:
@@ -49,7 +49,7 @@ Without drytools
             return self._comp() > other._comp()
 
 With drytools
-^^^^^^^^^^^^^
+-------------
 
 .. code-block:: python
    :linenos:
@@ -66,17 +66,17 @@ With drytools
             pass
 
 Getting started
----------------
+===============
 
 Method 1: pip
-^^^^^^^^^^^^^
+-------------
 
 .. code-block:: bash
 
     $ pip install drytools
 
 Method 2: Clone the `github repo <https://github.com/dan-elias/drytools>`_
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+--------------------------------------------------------------------------
 
 .. code-block:: bash
 
@@ -86,6 +86,6 @@ Method 2: Clone the `github repo <https://github.com/dan-elias/drytools>`_
 
 
 License
--------
+=======
 
 The project is licensed under the `GPL-3 <https://www.gnu.org/licenses/gpl-3.0.en.html>`_ license.
